@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Veri Görüntüleyici</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .json-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .json-container h2 {
+            margin-top: 0;
+        }
+        .json-key {
+            font-weight: bold;
+            color: #333;
+        }
+        .json-value {
+            color: #555;
+        }
+        .array-container {
+            margin-left: 20px;
+            border-left: 2px solid #ddd;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="json-container">
+        <h2>JSON Verisi</h2>
+        <pre id="json-data"></pre>
+    </div>
+
+    <script>
+        function renderJsonData(data, container) {
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const value = data[key];
+                    const div = document.createElement('div');
+
+                    if (Array.isArray(value)) {
+                        div.innerHTML = <span class="json-key">${key}:</span>;
+                        const arrayContainer = document.createElement('div');
+                        arrayContainer.className = 'array-container';
+                        value.forEach(item => {
+                            renderJsonData(item, arrayContainer);
+                        });
+                        div.appendChild(arrayContainer);
+                    } else if (typeof value === 'object' && value !== null) {
+                        div.innerHTML = <span class="json-key">${key}:</span>;
+                        const objectContainer = document.createElement('div');
+                        objectContainer.className = 'array-container';
+                        renderJsonData(value, objectContainer);
+                        div.appendChild(objectContainer);
+                    } else {
+                        div.innerHTML = <span class="json-key">${key}:</span> <span class="json-value">${value}</span>;
+                    }
+
+                    container.appendChild(div);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const jsonContainer = document.getElementById('json-data');
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => renderJsonData(data, jsonContainer))
+                .catch(error => console.error('JSON verisi yüklenirken hata oluştu:', error));
+        });
+    </script>
+</body>
+</html>
