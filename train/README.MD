@@ -1,4 +1,5 @@
 ## YAPI
+```
 rgb2thermal/
 ├── dataset/
 │   ├── train/
@@ -18,6 +19,7 @@ rgb2thermal/
 ├── utils.py
 ├── requirements.txt
 └── README.md
+```
 
 `python train.py` Modeli eğit rgb2thermal.pth çıktısı olucak
 `python inference.py` kendi datasetini termale çevir
